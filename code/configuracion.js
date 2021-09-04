@@ -1,10 +1,7 @@
 const config = {
-    DB_USER: 'postgres',
-    DB_HOST: 'localhost',
-    DB_NAME: 'tiendita',
-    DB_PASSWORD: 'admin123',
-    DB_PORT: 5432,
-    JWT_SECRET: 'ups-gye'
+    DB_URL: 'mongodb+srv://ups:ups2020@cluster0.pjyad.mongodb.net/tienda?retryWrites=true&w=majority',
+    PUERTO: 3000,
+    SECRET: ''
 }
 
 module.exports = config

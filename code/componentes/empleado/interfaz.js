@@ -1,6 +1,7 @@
 const express = require('express')
 const respuesta = require('../../red/respuestas')
 const controlador = require('./controlador')
+const {verificarUsuario} = require('../../middlewares/index')
 
 const ruta = express.Router()
 
@@ -15,7 +16,7 @@ ruta.get('/', function(req, res) {
         })
 })
 
-ruta.post('/', function(req, res) {
+ruta.post('/', verificarUsuario.verificarUsuarioDuplicado,  function(req, res) {
     controlador.agregarEmpleado( req.body )
         .then((data) => {
             respuesta.exito(req, res, data, 200)
