@@ -1,11 +1,12 @@
-DROP TABLE factura;
+/*DROP TABLE factura;
 DROP TABLE factura_detalle;
 DROP TABLE producto;
 DROP TABLE proveedor;
+DROP TABLE proveedor_producto;
 DROP TABLE cliente;
 DROP TABLE ciudad;
 DROP TABLE pais;
-DROP TABLE empleado;
+DROP TABLE empleado;*/
 
 CREATE TABLE Proveedor (
 	id_proveedor SERIAL NOT NULL,
@@ -16,8 +17,12 @@ CREATE TABLE Proveedor (
 CREATE TABLE Producto (
 	id_producto SERIAL NOT NULL,
 	nombre CHARACTER VARYING(20) NOT NULL,
-	valor MONEY NOT NULL,
-	ref_proveedor INTEGER NOT NULL 
+	valor MONEY NOT NULL
+);
+
+CREATE TABLE Proveedor_Producto (
+	ref_proveedor INTEGER NOT NULL,
+	ref_producto INTEGER NOT NULL
 );
 
 CREATE TABLE Pais (
@@ -63,21 +68,25 @@ CREATE TABLE Factura_Detalle (
 );
 
 ALTER TABLE Proveedor ADD CONSTRAINT PK_Proveedor PRIMARY KEY (id_proveedor);
-ALTER TABLE Producto ADD CONSTRAINT PK_Producto PRIMARY KEY (codigo);
+ALTER TABLE Producto ADD CONSTRAINT PK_Producto PRIMARY KEY (id_producto);
+ALTER TABLE Proveedor_Producto ADD CONSTRAINT PK_Proveedor_Producto PRIMARY KEY (ref_proveedor, ref_producto);
 ALTER TABLE Pais ADD CONSTRAINT PK_Pais PRIMARY KEY (id_pais);
 ALTER TABLE Ciudad ADD CONSTRAINT PK_Ciudad PRIMARY KEY (id_ciudad);
 ALTER TABLE Cliente ADD CONSTRAINT PK_Cliente PRIMARY KEY (cedula);
 ALTER TABLE Empleado ADD CONSTRAINT PK_Empleado PRIMARY KEY (cedula);
-ALTER TABLE Factura ADD CONSTRAINT PK_Factura PRIMARY KEY (codigo);
+ALTER TABLE Factura ADD CONSTRAINT PK_Factura PRIMARY KEY (id_factura);
 ALTER TABLE Factura_Detalle ADD CONSTRAINT PK_Factura_Detalle PRIMARY KEY (id_factura_detalle);
 
-ALTER TABLE Producto ADD CONSTRAINT FK_Producto_Proveedor FOREIGN KEY (ref_proveedor) REFERENCES Proveedor(id_proveedor);
+ALTER TABLE Proveedor_Producto 
+	ADD CONSTRAINT FK_Producto_Proveedor_Proveedor FOREIGN KEY (ref_proveedor) REFERENCES Proveedor(id_proveedor);
+ALTER TABLE Proveedor_Producto 
+	ADD CONSTRAINT FK_Producto_Proveedor_Producto FOREIGN KEY (ref_producto) REFERENCES Producto(id_producto);	
 ALTER TABLE Ciudad ADD CONSTRAINT FK_Ciudad_Pais FOREIGN KEY (ref_pais) REFERENCES Pais(id_pais);
 ALTER TABLE Cliente ADD CONSTRAINT FK_Cliente_Ciudad FOREIGN KEY (ref_ciudad) REFERENCES Ciudad(id_ciudad);
 ALTER TABLE Factura ADD CONSTRAINT FK_Factura_Cliente FOREIGN KEY (ref_cliente) REFERENCES Cliente(cedula);
 ALTER TABLE Factura ADD CONSTRAINT FK_Factura_Empleado 
 	FOREIGN KEY (ref_cliente) REFERENCES Empleado(cedula);
 ALTER TABLE Factura_Detalle ADD CONSTRAINT FK_Factura_Detalle_Factura 
-	FOREIGN KEY (ref_factura) REFERENCES Factura(codigo);
+	FOREIGN KEY (ref_factura) REFERENCES Factura(id_factura);
 ALTER TABLE Factura_Detalle ADD CONSTRAINT FK_Factura_Detalle_Producto 
-	FOREIGN KEY (ref_producto) REFERENCES Producto(codigo);
+	FOREIGN KEY (ref_producto) REFERENCES Producto(id_producto);
