@@ -4,6 +4,7 @@ const empleado = require('../componentes/empleado/interfaz')
 const cliente = require('../componentes/cliente/interfaz')
 const proveedor = require('../componentes/proveedor/interfaz')
 const producto = require('../componentes/producto/interfaz')
+const factura = require('../componentes/factura/interfaz')
 
 const rutas = function(servidor) {
     servidor.use('/ciudad', ciudad)
@@ -12,6 +13,7 @@ const rutas = function(servidor) {
     servidor.use('/cliente', cliente)
     servidor.use('/proveedor', proveedor)
     servidor.use('/producto', producto)
+    servidor.use('/factura', factura)
 }
 
 module.exports = rutas

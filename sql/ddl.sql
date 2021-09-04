@@ -85,7 +85,7 @@ ALTER TABLE Ciudad ADD CONSTRAINT FK_Ciudad_Pais FOREIGN KEY (ref_pais) REFERENC
 ALTER TABLE Cliente ADD CONSTRAINT FK_Cliente_Ciudad FOREIGN KEY (ref_ciudad) REFERENCES Ciudad(id_ciudad);
 ALTER TABLE Factura ADD CONSTRAINT FK_Factura_Cliente FOREIGN KEY (ref_cliente) REFERENCES Cliente(cedula);
 ALTER TABLE Factura ADD CONSTRAINT FK_Factura_Empleado 
-	FOREIGN KEY (ref_cliente) REFERENCES Empleado(cedula);
+	FOREIGN KEY (ref_empleado) REFERENCES Empleado(cedula);
 ALTER TABLE Factura_Detalle ADD CONSTRAINT FK_Factura_Detalle_Factura 
 	FOREIGN KEY (ref_factura) REFERENCES Factura(id_factura);
 ALTER TABLE Factura_Detalle ADD CONSTRAINT FK_Factura_Detalle_Producto 
