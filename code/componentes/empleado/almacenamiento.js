@@ -1,4 +1,6 @@
 const pool = require('../../bd')
+const jwt = require('jsonwebtoken')
+const config = require('../../configuracion')
 
 async function obtenerEmpleado( filtroEmpleado ) {
     let resultado = null
@@ -12,7 +14,14 @@ async function obtenerEmpleado( filtroEmpleado ) {
 }
 
 async function agregarEmpleado( empleado ) {
-    return await pool.query('INSERT INTO empleado (cedula, nombre, apellido, usuario, clave) VALUES ($1, $2, $3, $4, $5)', [empleado.cedula, empleado.nombre, empleado.apellido, empleado.usuario, empleado.clave])
+    const empleado_creado = await pool.query('INSERT INTO empleado (cedula, nombre, apellido, usuario, clave) VALUES ($1, $2, $3, $4, $5)', [empleado.cedula, empleado.nombre, empleado.apellido, empleado.usuario, empleado.clave])
+
+    const token = jwt.sign({id: empleado.cedula}, config.SECRET, {
+            expiresIn: 864000
+    })
+
+    return token
+
 }
 
 async function actualizarEmpleado( empleado ) {
