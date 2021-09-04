@@ -5,8 +5,8 @@ const controlador = require('./controlador')
 const ruta = express.Router()
 
 ruta.get('/', function(req, res) {
-    const filtroEmpleado = req.query.empleado || null
-    controlador.obtenerEmpleados( filtroEmpleado )
+    const filtroCliente = req.query.cliente || null
+    controlador.obtenerClientes( filtroCliente )
         .then((data) => {
             respuesta.exito(req, res, data, 200)
         })
@@ -16,7 +16,7 @@ ruta.get('/', function(req, res) {
 })
 
 ruta.post('/', function(req, res) {
-    controlador.agregarEmpleado( req.body )
+    controlador.agregarCliente( req.body )
         .then((data) => {
             respuesta.exito(req, res, data, 200)
         })
@@ -26,7 +26,7 @@ ruta.post('/', function(req, res) {
 })
 
 ruta.patch('/', function(req, res) {
-    controlador.actualizarEmpleado(req.body)
+    controlador.actualizarCliente(req.body)
         .then((data) => {
             respuesta.exito(req, res, data, 200)
         })
@@ -36,7 +36,7 @@ ruta.patch('/', function(req, res) {
 })
 
 ruta.delete('/', function(req, res) {
-    controlador.eliminarEmpleado(req.body)
+    controlador.eliminarCliente(req.body)
         .then((data) => {
             respuesta.exito(req, res, data, 200)
         })

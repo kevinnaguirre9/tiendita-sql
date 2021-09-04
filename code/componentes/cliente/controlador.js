@@ -30,6 +30,6 @@ function eliminarCliente( empleado ) {
 module.exports = {
     obtenerClientes,
     agregarCliente,
-    actualizarEmpleado,
+    actualizarCliente,
     eliminarCliente,
 }

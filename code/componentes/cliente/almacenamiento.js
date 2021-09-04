@@ -12,15 +12,15 @@ async function obtenerCliente( filtroCliente ) {
 }
 
 async function agregarCliente( cliente ) {
-    return await pool.query('INSERT INTO cliente (cedula, nombre, apellido, ref_ciudad) VALUES ($1, $2, $3, $4)', [cliente.cedula, cliente.nombre, cliente.apellido, cliente.usuario, cliente.clave])
+    return await pool.query('INSERT INTO cliente (cedula, nombre, apellido, ref_ciudad) VALUES ($1, $2, $3, $4)', [cliente.cedula, cliente.nombre, cliente.apellido, cliente.ciudad])
 }
 
-async function actualizarCliente( empleado ) {
-    return await pool.query('UPDATE empleado SET nombre = $1, apellido = $2, usuario = $3, clave = $4 WHERE cedula = $5', [empleado.nombre, empleado.apellido, empleado.usuario, empleado.clave, empleado.cedula])
+async function actualizarCliente( cliente ) {
+    return await pool.query('UPDATE cliente SET nombre = $1, apellido = $2, ref_ciudad = $3 WHERE cedula = $4', [cliente.nombre, cliente.apellido, cliente.ciudad, cliente.cedula])
 }
 
-async function eliminarCliente( empleado ) {
-    return await pool.query('DELETE FROM empleado WHERE cedula = $1', [empleado.cedula])
+async function eliminarCliente( cliente ) {
+    return await pool.query('DELETE FROM cliente WHERE cedula = $1', [cliente.cedula])
 }
 
 module.exports = {
