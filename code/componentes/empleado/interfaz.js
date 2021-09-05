@@ -1,11 +1,11 @@
 const express = require('express')
 const respuesta = require('../../red/respuestas')
 const controlador = require('./controlador')
-const {verificarUsuario} = require('../../middlewares/index')
+const {verificarUsuario, authJwt} = require('../../middlewares/index')
 
 const ruta = express.Router()
 
-ruta.get('/', function(req, res) {
+ruta.get('/', authJwt.verificarToken, function(req, res) {
     const filtroEmpleado = req.query.empleado || null
     controlador.obtenerEmpleados( filtroEmpleado )
         .then((data) => {
@@ -16,7 +16,7 @@ ruta.get('/', function(req, res) {
         })
 })
 
-ruta.post('/', verificarUsuario.verificarUsuarioDuplicado,  function(req, res) {
+ruta.post('/', verificarUsuario.verificarUsuarioDuplicado, authJwt.verificarToken, function(req, res) {
     controlador.agregarEmpleado( req.body )
         .then((data) => {
             respuesta.exito(req, res, data, 200)
@@ -26,7 +26,7 @@ ruta.post('/', verificarUsuario.verificarUsuarioDuplicado,  function(req, res) {
         })
 })
 
-ruta.patch('/', function(req, res) {
+ruta.patch('/', authJwt.verificarToken, function(req, res) {
     controlador.actualizarEmpleado(req.body)
         .then((data) => {
             respuesta.exito(req, res, data, 200)
@@ -36,7 +36,7 @@ ruta.patch('/', function(req, res) {
         })
 })
 
-ruta.delete('/', function(req, res) {
+ruta.delete('/', authJwt.verificarToken, function(req, res) {
     controlador.eliminarEmpleado(req.body)
         .then((data) => {
             respuesta.exito(req, res, data, 200)
