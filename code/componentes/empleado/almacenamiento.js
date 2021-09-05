@@ -1,6 +1,7 @@
 const pool = require('../../bd')
-const jwt = require('jsonwebtoken')
-const config = require('../../configuracion')
+const bcrypt = require('bcryptjs')
+//const jwt = require('jsonwebtoken')
+//const config = require('../../configuracion')
 
 async function obtenerEmpleado( filtroEmpleado ) {
     let resultado = null
@@ -13,19 +14,56 @@ async function obtenerEmpleado( filtroEmpleado ) {
     return resultado.rows
 }
 
+const encriptarClave = async(clave) => {
+    try {
+        const salt = await bcrypt.genSalt(10);
+        return await bcrypt.hash(clave, salt);
+    } catch (error) {
+        throw error
+    }
+}
+
 async function agregarEmpleado( empleado ) {
-    const empleado_creado = await pool.query('INSERT INTO empleado (cedula, nombre, apellido, usuario, clave) VALUES ($1, $2, $3, $4, $5)', [empleado.cedula, empleado.nombre, empleado.apellido, empleado.usuario, empleado.clave])
+    const cliente = await pool.connect() 
 
-    const token = jwt.sign({id: empleado.cedula}, config.SECRET, {
-            expiresIn: 864000
-    })
+    try {
+        await cliente.query('BEGIN')
 
-    return token
+        const clave = await encriptarClave(empleado.clave)
 
+        const empleado_creado = await cliente.query('INSERT INTO empleado (cedula, nombre, apellido, usuario, clave) VALUES ($1, $2, $3, $4, $5)', [empleado.cedula, empleado.nombre, empleado.apellido, empleado.usuario, clave])
+
+        await cliente.query('COMMIT')
+
+        return empleado_creado
+    } catch (error) {
+        await cliente.query('ROLLBACK')
+        throw error
+    } finally {
+        cliente.release()
+    }
 }
 
 async function actualizarEmpleado( empleado ) {
-    return await pool.query('UPDATE empleado SET nombre = $1, apellido = $2, usuario = $3, clave = $4 WHERE cedula = $5', [empleado.nombre, empleado.apellido, empleado.usuario, empleado.clave, empleado.cedula])
+    const cliente = await pool.connect() 
+
+    try {
+        await cliente.query('BEGIN')
+
+        const clave = await encriptarClave(empleado.clave)
+
+        const empleado_actualizar = 'UPDATE empleado SET nombre = $1, apellido = $2, usuario = $3, clave = $4 WHERE cedula = $5'
+        const res1 = await cliente.query(empleado_actualizar, [empleado.nombre, empleado.apellido, empleado.usuario, clave, empleado.cedula])
+
+        await cliente.query('COMMIT')
+
+        return res1
+    } catch (error) {
+        await cliente.query('ROLLBACK')
+        throw error
+    } finally {
+        cliente.release()
+    }
 }
 
 async function eliminarEmpleado( empleado ) {

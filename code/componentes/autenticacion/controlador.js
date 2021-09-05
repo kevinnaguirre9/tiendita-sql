@@ -8,8 +8,8 @@ function obtenerEmpleados( filtroCiudad ) {
 
 function agregarEmpleado( empleado ) {
     return new Promise((resolve, reject) => {
-        datos.agregar( empleado )
-        resolve( empleado )
+        const token = datos.agregar( empleado )
+        resolve( token )
     })
 }
 
