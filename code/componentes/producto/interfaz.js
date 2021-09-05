@@ -5,7 +5,7 @@ const {authJwt} = require('../../middlewares/index')
 
 const ruta = express.Router()
 
-ruta.get('/', function(req, res) {
+ruta.get('/', authJwt.verificarToken, function(req, res) {
     const filtroProducto = req.query.producto || null
     controlador.obtenerProductos( filtroProducto )
         .then((data) => {
