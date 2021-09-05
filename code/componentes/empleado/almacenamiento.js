@@ -1,7 +1,5 @@
 const pool = require('../../bd')
 const bcrypt = require('bcryptjs')
-//const jwt = require('jsonwebtoken')
-//const config = require('../../configuracion')
 
 async function obtenerEmpleado( filtroEmpleado ) {
     let resultado = null
